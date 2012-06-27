@@ -1,0 +1,5 @@
+ * Efficiency
+ * Complete sock_srv support (having issues, seems that it starts nc but it freezes... weird?)
+ * Complete sock_client support
+ * Complete file support
+ * Advanced fuzz case generation

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+SRCDIR="src/"
+INFILES="main.cpp conf.cpp dbg.cpp generator.cpp fuzzer.cpp fuzz_types.cpp fuzz_class_init.cpp"
+OUTFILE="../shiva"
+
+cd $SRCDIR
+g++ -ggdb -o $OUTFILE $INFILES -lconfig++
+
