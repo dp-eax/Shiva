@@ -29,7 +29,7 @@ int fuzz::construct_fuzz_case(int index)
 
   if(type == "cli")                         // need to make this work with execv... string array issues.
     temp.str(arguments.c_str());  // bug, assign
-  else if(type == "socket_srv")
+  else if(type == "sock_srv")
     temp.str(packet.c_str());
 
   while(getline(temp, temp1, '|'))

@@ -85,12 +85,12 @@ int fuzz::server_socket()
 
     do
     {
-      int i;
-      for(i=0;i<packetno;i++)
-      {
-        construct_fuzz_case(i);
+//      for(int i=0;i<packetno;i++)
+//      {
+        construct_fuzz_case(0);
+        fuzzcase.append("\n");
         write(sock, fuzzcase.c_str(), fuzzcase.length());
-      }
+//      }
     } while(crash != 1); // signal handler has not triggered
   }
   else
