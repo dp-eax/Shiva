@@ -26,7 +26,7 @@ int fuzz::cmdline()
   int val;
   for(;;)
   {
-    construct_fuzz_case(0);
+    construct_fuzz_case();
     crash = p_dbg();
     if(crash == 1)
     {
@@ -85,12 +85,15 @@ int fuzz::server_socket()
 
     do
     {
-//      for(int i=0;i<packetno;i++)
-//      {
-        construct_fuzz_case(0);
-        fuzzcase.append("\n");
-        write(sock, fuzzcase.c_str(), fuzzcase.length());
-//      }
+      construct_fuzz_case();
+      istringstream temp;
+      string temp1;
+      temp.str(packet_gen);
+      while(getline(temp, temp1, ';'))
+      {
+        temp1.append("\n");
+        write(sock, temp1.c_str(), temp1.length()); // race condition?
+      }
     } while(crash != 1); // signal handler has not triggered
   }
   else

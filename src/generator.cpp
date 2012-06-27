@@ -19,7 +19,7 @@
 
 #include "../include/fuzz_class.h"
 
-int fuzz::construct_fuzz_case(int index)
+int fuzz::construct_fuzz_case()
 {
   istringstream temp;
   string temp1, temp2;
@@ -46,7 +46,10 @@ int fuzz::construct_fuzz_case(int index)
       i = 1;
     }
   }
-  fuzzcase = temp2;
+  if(type == "cli")                         // need to make this work with execv... string array issues.
+    fuzzcase = temp2;
+  else if(type == "sock_srv")
+    packet_gen = temp2;
 }
 
 void fuzz::gen_fuzzcase()
