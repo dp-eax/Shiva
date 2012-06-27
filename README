@@ -1,0 +1,18 @@
+Shiva is a generic fuzzer written in C++, it has a custom debugger 
+and will be designed for file fuzzing, command line argument fuzzing, 
+clients, and servers. It will accept a config file of the format:
+
+  type = "cli";
+  filename = "dbg/test-cli.conf";
+  arguments = "B|A|C";
+
+The pipes in the "arguments" parameter designate what will be fuzzed, 
+in this case, the "A". This will be replaced with the fuzzcases, 
+e.g. BAAAAAC. Examples and test programs are in the dbg directory.
+
+To install, you must install libconfig. Once this is installed simply, 
+./compile. All files are distributed under the GNU v3 license, but 
+should remain private.
+
+(c)2012 Justin Barrick - vorbis
+
