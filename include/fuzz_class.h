@@ -30,6 +30,7 @@ class fuzz
     string conf;
     string ip;
     string packet;
+    string packet_gen;
     string fuzzcase;
     string raw_fuzzcase;
     string type;
@@ -51,7 +52,7 @@ class fuzz
     int client_socket();
     int server_socket();
 
-    int construct_fuzz_case(int index); // fuzz case generation
+    int construct_fuzz_case(); // fuzz case generation
     void gen_fuzzcase();
 };
 
