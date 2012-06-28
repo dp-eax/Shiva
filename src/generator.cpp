@@ -54,8 +54,56 @@ int fuzz::construct_fuzz_case()
     packet_gen = temp2;
 }
 
+/*
+  * Modes for data generation:
+    * 0 - long strings
+    * 1 - format strings
+    * 2 - escape sequences
+    * 3 - EOFs
+    * 4 - null bytes
+    * 5 - random binary data
+  * --------------------------
+*/
+
 void fuzz::gen_fuzzcase()
 {
-  raw_fuzzcase = raw_fuzzcase + "A";
+  if(raw_fuzzcase.length() > 10000 && fuzzcase_mode == 0) // long strings
+  {
+    raw_fuzzcase = raw_fuzzcase + "A";
+  }
+  else if(/* && */fuzzcase_mode == 1) // format strings
+  {
+    fuzzcase_mode++;
+  }
+  else if(/* && */fuzzcase_mode == 2) // escape sequences
+  {
+    fuzzcase_mode++;
+  }
+  else if(/* && */fuzzcase_mode == 3) // EOFs
+  {
+    fuzzcase_mode++;
+  }
+  else if(/* && */fuzzcase_mode == 4) // null strings
+  {
+    fuzzcase_mode++;
+  }
+  else if(/* && */fuzzcase_mode == 5) // random binary data
+  {
+    fuzzcase_mode++;
+  }
+
+  // change data generation mode (see above for mode numbers)
+  if(raw_fuzzcase.length() > 10000 && fuzzcase_mode == 0)
+    fuzzcase_mode++;
+  else if(/* && */fuzzcase_mode == 1)
+    fuzzcase_mode++;
+  else if(/* && */fuzzcase_mode == 2)
+    fuzzcase_mode++;
+  else if(/* && */fuzzcase_mode == 3)
+    fuzzcase_mode++;
+  else if(/* && */fuzzcase_mode == 4)
+    fuzzcase_mode++;
+  else if(/* && */fuzzcase_mode == 5)
+    fuzzcase_mode++;
 }
 

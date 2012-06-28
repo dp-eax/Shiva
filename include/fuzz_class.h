@@ -42,6 +42,7 @@ class fuzz
     int packetno;
     int port;
     int crash;
+    int fuzzcase_mode;
 
     fuzz(); // initialize (I'm sure there's a better way to do this)
 
