@@ -29,8 +29,10 @@ int fuzz::construct_fuzz_case()
 
   if(type == "cli")                         // need to make this work with execv... string array issues.
     temp.str(arguments.c_str());  // bug, assign
-  else if(type == "sock_srv")
+  else if(type == "sock_srv" || type == "sock_client")
     temp.str(packet.c_str());
+  else if(type == "file")
+    temp.str(file_to_fuzz.c_str());
 
   while(getline(temp, temp1, '|'))
   {
@@ -46,9 +48,9 @@ int fuzz::construct_fuzz_case()
       i = 1;
     }
   }
-  if(type == "cli")                         // need to make this work with execv... string array issues.
+  if(type == "cli" || type == "file")
     fuzzcase = temp2;
-  else if(type == "sock_srv")
+  else if(type == "sock_srv" || type == "sock_client")
     packet_gen = temp2;
 }
 

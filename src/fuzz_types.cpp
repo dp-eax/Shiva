@@ -31,6 +31,7 @@ int fuzz::cmdline()
     if(crash == 1)
     {
       cout << "\nCrash with: " << fuzzcase << endl;
+      cout << "Length: " << fuzzcase.length() << endl;
       break;
     }
     else if(val == 2)
@@ -44,14 +45,97 @@ int fuzz::cmdline()
 int fuzz::file()
 {
   cout << "File.\n\n";
-  return p_dbg();
+  int val;
+  string command = "cp " + file_fuzz + " " + file_fuzz + ".bak";
+  system(command.c_str());
+
+  string line;
+  ifstream f(file_fuzz.c_str());
+  while(f.good())
+  {
+    getline(f, line);
+    file_to_fuzz.append(line);
+  }
+  f.close();
+
+  for(;;)
+  {
+    construct_fuzz_case();
+    ofstream f(file_fuzz.c_str(), ios::trunc);
+    f << fuzzcase;
+    f.close();
+    crash = p_dbg();
+    if(crash == 1)
+    {
+      command = "cp " + file_fuzz + " " + file_fuzz + ".CRASH";
+      system(command.c_str());
+      cout << "\nCrash with: " << file_fuzz << ".CRASH" << endl;
+      break;
+    }
+    else if(val == 2)
+    {
+      break;
+    }
+  }
+  command = "mv " + file_fuzz + ".bak " + file_fuzz;
+  system(command.c_str());
+  return crash;
 }
 
 int fuzz::client_socket()
 {
   cout << "Client socket.\n\n";
-  return p_dbg();
+  cout << "[*] Starting server...\n";
+  int sock, client, cpid;
+  socklen_t clilen;
+  struct sockaddr_in server_addr, cli_addr;
+
+  if((cpid = fork()) == 0)
+  {
+    if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+      cout << "ERROR: socket().\n";
+
+    bzero((char *) &server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(port);
+
+    if (bind(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+      cout << "ERROR: bind().\n";
+
+    listen(sock, 5);
+    clilen = sizeof(cli_addr);
+    client = accept(sock, (struct sockaddr *) &cli_addr, &clilen);
+
+    if (client < 0)
+      cout << "ERROR: accept().\n";
+
+    do
+    {
+      construct_fuzz_case();
+      istringstream temp;
+      string temp1;
+      temp.str(packet_gen);
+      while(getline(temp, temp1, ';'))
+      {
+        temp1.append("\n");
+        write(client, temp1.c_str(), temp1.length()); // race condition?
+      }
+    } while(crash != 1); // signal handler has not triggered
+    close(client);
+    close(sock);
+    cout << "\nCrash with: " << packet_gen << endl;
+    cout << "Length: " << packet_gen.length() << endl;
+  }
+  else
+  {
+    if(p_dbg() == 1)
+      kill(cpid, SIGUSR1);
+    else
+      kill(cpid, SIGUSR2);
+  }
 }
+
 
 int fuzz::server_socket()
 {
@@ -95,11 +179,16 @@ int fuzz::server_socket()
         write(sock, temp1.c_str(), temp1.length()); // race condition?
       }
     } while(crash != 1); // signal handler has not triggered
+    cout << "\nCrash with: " << packet_gen << endl;
+    cout << "Length: " << packet_gen.length() << endl;
+    close(sock);
   }
   else
   {
     if(p_dbg() == 1)
+    {
       kill(cpid, SIGUSR1);
+    }
     else
       kill(cpid, SIGUSR2);
   }

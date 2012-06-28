@@ -68,22 +68,24 @@ void fuzz::parse_config()  // parse config using libconfig
     exit(1);
   }
 
-  char key[1024];
-  strcpy(key, "type");
-  type = lookup_str(&cfg, key, type);
-  strcpy(key, "filename");
-  filename = lookup_str(&cfg, key, filename);
-  strcpy(key, "arguments");
-  arguments = lookup_str(&cfg, key, arguments);
+  type = lookup_str(&cfg, (char *)"type", type);
+  filename = lookup_str(&cfg, (char *)"filename", filename);
+  arguments = lookup_str(&cfg, (char *)"arguments", arguments);
 
   if(type == "sock_srv")
   {
-    strcpy(key, "ip");
     ip = lookup_str(&cfg, (char *)"ip", ip);
-    strcpy(key, "port");
     port = lookup_int(&cfg, (char *)"port", port);
-    strcpy(key, "packet");
     packet = lookup_str(&cfg, (char *)"packet", packet);
+  }
+  if(type == "sock_client")
+  {
+    port = lookup_int(&cfg, (char *)"port", port);
+    packet = lookup_str(&cfg, (char *)"packet", packet);
+  }
+  if(type == "file")
+  {
+    file_fuzz = lookup_str(&cfg, (char *)"file", file_fuzz);
   }
 }
 

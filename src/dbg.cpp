@@ -32,7 +32,7 @@ int fuzz::p_dbg()
   struct stat sb;
   if(!type.compare("cli"))
     temp.str(fuzzcase.c_str());
-  else if(!type.compare("sock_srv"))
+  else if(!type.compare("sock_srv") || !type.compare("sock_client") || !type.compare("file"))
     temp.str(arguments.c_str());
 
   strncpy(arg[i], filename.c_str(), 1024);

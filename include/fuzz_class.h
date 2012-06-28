@@ -34,6 +34,8 @@ class fuzz
     string fuzzcase;
     string raw_fuzzcase;
     string type;
+    string file_fuzz;
+    string file_to_fuzz;
 
     int num_args;
     int mode;
