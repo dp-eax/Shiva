@@ -14,8 +14,8 @@ To install, you must install libconfig. Once this is installed simply,
 ./compile. All files are distributed under the GNU v3 license, but 
 should remain private.
 
-Please report any bugs to me or in "Issues" on bitbucket.org/vorbis/shiva.
-You can shoot me an email at jusbarri@uat.edu orI can be found on IRC on 
+Please report any bugs to me or in "Issues" on https://bitbucket.org/vorbis/shiva.
+You can shoot me an email at jusbarri@uat.edu or I can be found on IRC on 
 bindshell.it.cx or irc.2600.net under "vorbis".
 
 (c)2012 Justin Barrick - vorbis
