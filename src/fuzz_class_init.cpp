@@ -26,4 +26,5 @@ fuzz::fuzz()
   port = 0;
   num_args = 0;
   crash = 0;
+  fuzzcase_mode = 0;
 }

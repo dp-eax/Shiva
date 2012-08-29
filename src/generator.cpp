@@ -21,20 +21,20 @@
 
 int fuzz::construct_fuzz_case()
 {
-  istringstream temp;
+  istringstream store_for_split;
   string temp1, temp2;
   int i = 0;
 
   fuzzcase = "";
 
-  if(type == "cli")                         // need to make this work with execv... string array issues.
-    temp.str(arguments.c_str());  // bug, assign
-  else if(type == "sock_srv" || type == "sock_client")
-    temp.str(packet.c_str());
-  else if(type == "file")
-    temp.str(file_to_fuzz.c_str());
+  if(!type.compare("cli"))                         // need to make this work with execv... string array issues.
+    store_for_split.str(arguments.c_str());  // bug, assign
+  else if(!type.compare("sock_srv") || !type.compare("sock_client"))
+    store_for_split.str(packet.c_str());
+  else if(!type.compare("file"))
+    store_for_split.str(file_to_fuzz.c_str());
 
-  while(getline(temp, temp1, '|'))
+  while(getline(store_for_split, temp1, '|'))
   {
     if(i == 1)
     {
@@ -48,9 +48,10 @@ int fuzz::construct_fuzz_case()
       i = 1;
     }
   }
-  if(type == "cli" || type == "file")
+
+  if(!type.compare("cli") || !type.compare("file"))
     fuzzcase = temp2;
-  else if(type == "sock_srv" || type == "sock_client")
+  else if(!type.compare("sock_srv") || !type.compare("sock_client"))
     packet_gen = temp2;
 }
 
@@ -67,7 +68,7 @@ int fuzz::construct_fuzz_case()
 
 void fuzz::gen_fuzzcase()
 {
-  if(raw_fuzzcase.length() > 10000 && fuzzcase_mode == 0) // long strings
+  if(raw_fuzzcase.length() < 10000 && fuzzcase_mode == 0) // long strings
   {
     raw_fuzzcase = raw_fuzzcase + "A";
   }
